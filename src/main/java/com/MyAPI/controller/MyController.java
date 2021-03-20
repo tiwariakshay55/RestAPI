@@ -1,5 +1,6 @@
 package com.MyAPI.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.MyAPI.model.Authors;
 import com.MyAPI.model.Posts;
 import com.MyAPI.service.Service;
+import com.google.gson.JsonIOException;
 
 @RestController
 public class MyController {
@@ -25,34 +27,34 @@ public class MyController {
 	Service service;
 
 	@GetMapping("/posts")
-	public ResponseEntity<List<Posts>> getAllPost() {
+	public ResponseEntity<?> getAllPost() throws JsonIOException, IOException {
 		List<Posts> allPost = service.getAllPost();
 		if (allPost != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(allPost);
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No data found");
 		}
 
 	}
 
 	@GetMapping("/authors")
-	public ResponseEntity<List<Authors>> getAllAuthors() {
+	public ResponseEntity<?> getAllAuthors() throws JsonIOException, IOException {
 		List<Authors> allAuthors = service.getAllAuthors();
 		if (allAuthors != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(allAuthors);
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No data found");
 		}
 
 	}
 
 	@GetMapping("/posts/{id}")
-	public ResponseEntity<Optional<Posts>> getPostById(@PathVariable("id") Optional<Integer> postId) {
+	public ResponseEntity<?> getPostById(@PathVariable("id") Optional<Integer> postId) throws JsonIOException, IOException {
 		Optional<Posts> myPost = service.getPostById(postId);
 		if (myPost != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(myPost);
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No data found");
 		}
 
 	}
@@ -64,7 +66,7 @@ public class MyController {
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Duplicate ID Found");
 		}
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.status(HttpStatus.OK).body("Record added");
 	}
 
 	@PostMapping("/authors")
@@ -74,37 +76,37 @@ public class MyController {
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Duplicate ID Found");
 		}
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.status(HttpStatus.OK).body("Record added");
 	}
 
 	@PutMapping("/authors/{id}")
-	public ResponseEntity<?> updateAuthorById(@RequestBody Authors data, @PathVariable("id") int authorId) {
+	public ResponseEntity<?> updateAuthorById(@RequestBody Authors data, @PathVariable("id") int authorId) throws Exception {
 		Optional<Authors> auth = service.updateAuthor(data, authorId);
 		if (auth != null) {
-			return ResponseEntity.status(HttpStatus.OK).build();
+			return ResponseEntity.status(HttpStatus.OK).body("PUT operation done");
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No data found");
 		}
 
 	}
 
 	@PatchMapping("/posts/{id}")
-	public ResponseEntity<Posts> updatePostById(@RequestBody Posts data, @PathVariable("id") Optional<Integer> postId) {
+	public ResponseEntity<?> updatePostById(@RequestBody Posts data, @PathVariable("id") Optional<Integer> postId) throws JsonIOException, IOException {
 		Optional<Posts> myPost = service.updatePost(data, postId);
 		if (myPost != null) {
-			return ResponseEntity.status(HttpStatus.OK).body(null);
+			return ResponseEntity.status(HttpStatus.OK).body("Updated");
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No data found");
 		}
 	}
 
 	@DeleteMapping("/posts/{id}")
-	public ResponseEntity<?> deletePostById(@PathVariable("id") Optional<Integer> postId) {
+	public ResponseEntity<?> deletePostById(@PathVariable("id") Optional<Integer> postId) throws JsonIOException, IOException {
 		boolean isremoved = service.deletePost(postId);
 		if (!isremoved) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No data found");
 		}
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.status(HttpStatus.OK).body("Deleted Sucessfully");
 
 	}
 
