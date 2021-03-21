@@ -26,8 +26,9 @@ public class JsonWriter {
 		mapper.registerModule(new Jdk8Module());
 		try {
 			 
+			String str = resource.getURL().getPath().replace("!", "");
 			
-			InputStream is = new FileInputStream(new File(resource.getURL().getPath()));
+			InputStream is = new FileInputStream(new File(str));
 			TypeReference<ListofPostsAndAuthors> reference = new TypeReference<ListofPostsAndAuthors>() {
 			};
 			posts = mapper.readValue(is, reference);
@@ -48,7 +49,7 @@ public class JsonWriter {
 		mapper.registerModule(new Jdk8Module());
 		try {
 			
-				mapper.writeValue(new File(resource.getURL().getPath()), posts);
+				mapper.writeValue(new File(resource.getURL().getPath().replace("!", "")), posts);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
