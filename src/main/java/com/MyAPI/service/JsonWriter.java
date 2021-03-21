@@ -2,8 +2,10 @@ package com.MyAPI.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import org.springframework.core.io.ClassPathResource;
@@ -26,9 +28,9 @@ public class JsonWriter {
 		mapper.registerModule(new Jdk8Module());
 		try {
 			 
-			String str = resource.getURL().getPath().replace("!", "");
+			//String str = resource.getURL().getPath().replace("!", "");
 			
-			InputStream is = new FileInputStream(new File(str));
+			InputStream is = TypeReference.class.getResourceAsStream("/json/store.json");
 			TypeReference<ListofPostsAndAuthors> reference = new TypeReference<ListofPostsAndAuthors>() {
 			};
 			posts = mapper.readValue(is, reference);
@@ -47,9 +49,10 @@ public class JsonWriter {
 		posts.setAuthors(AuthData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
+		String path = TypeReference.class.getResource("/json/store.json").getPath();
 		try {
-			
-				mapper.writeValue(new File(resource.getURL().getPath().replace("!", "")), posts);
+			    OutputStream os = new FileOutputStream(path);
+				mapper.writeValue(os, posts);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
