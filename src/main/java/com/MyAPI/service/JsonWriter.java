@@ -49,7 +49,7 @@ public class JsonWriter {
 		posts.setAuthors(AuthData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
-		String path = TypeReference.class.getResource("/json/store.json").getPath();
+		String path = TypeReference.class.getResource("/json/store.json").getPath().replace("!", "");
 		try {
 			    OutputStream os = new FileOutputStream(path);
 				mapper.writeValue(os, posts);
