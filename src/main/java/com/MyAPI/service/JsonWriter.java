@@ -4,8 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.core.io.ClassPathResource;
 
 import com.MyAPI.model.Authors;
 import com.MyAPI.model.ListofPostsAndAuthors;
@@ -22,7 +26,8 @@ public class JsonWriter {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
 		try {
-			InputStream is = new FileInputStream(new File("C:\\public\\workspace\\restAPI\\RestAPI\\store.json"));
+			
+			InputStream is = new FileInputStream(new File(new ClassPathResource("/templates").getFile().getAbsolutePath()+"/store.json"));
 			TypeReference<ListofPostsAndAuthors> reference = new TypeReference<ListofPostsAndAuthors>() {
 			};
 			posts = mapper.readValue(is, reference);
@@ -43,7 +48,7 @@ public class JsonWriter {
 		mapper.registerModule(new Jdk8Module());
 		try {
 			
-				mapper.writeValue(new File("C:\\public\\workspace\\restAPI\\RestAPI\\store.json"), posts);
+				mapper.writeValue(new File(new ClassPathResource("/templates").getFile().getAbsolutePath()+"/store.json"), posts);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
