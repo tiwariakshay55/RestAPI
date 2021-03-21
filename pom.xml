@@ -47,6 +47,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                <requiresUnpack>
+                    <dependency>
+                        <groupId>com.MyAPI</groupId>
+                        <artifactId>RestAPI</artifactId>
+                    </dependency>
+                </requiresUnpack>
+            </configuration>
 			</plugin>
 		</plugins>
 	</build>
