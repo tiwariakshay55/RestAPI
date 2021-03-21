@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.MyAPI.model.Authors;
@@ -27,8 +28,8 @@ public class MyController {
 	Service service;
 
 	@GetMapping("/posts")
-	public ResponseEntity<?> getAllPost() throws JsonIOException, IOException {
-		List<Posts> allPost = service.getAllPost();
+	public ResponseEntity<?> getAllPost(@RequestParam(required = false) String  _sort, @RequestParam(required = false) String  _order) throws JsonIOException, IOException {
+		List<Posts> allPost = service.getAllPost(_sort , _order);
 		if (allPost != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(allPost);
 		} else {

@@ -2,6 +2,8 @@ package com.MyAPI.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +16,7 @@ import com.google.gson.JsonIOException;
 
 @Component
 public class Service {
-
+     FieldComparator comparator = new FieldComparator();
 	JsonWriter writerReader = new JsonWriter();
 	ListofPostsAndAuthors listofPosts = new ListofPostsAndAuthors();
 	List<Posts> postData = new ArrayList<>();
@@ -56,9 +58,12 @@ public class Service {
 		writerReader.writeToJson(postData , authData);
 	}
 
-	public List<Posts> getAllPost() throws JsonIOException, IOException {
+	public List<Posts> getAllPost(String _sort, String _order) throws JsonIOException, IOException {
+		
 		listofPosts = writerReader.readFromJson();
 		postData = listofPosts.getPosts();
+		comparator.set_sort(_sort, _order);
+		Collections.sort(postData, comparator );
 		return Optional.of(postData).orElse(null);		
 	}
 
