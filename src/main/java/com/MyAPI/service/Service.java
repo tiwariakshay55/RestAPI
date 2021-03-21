@@ -16,7 +16,7 @@ import com.google.gson.JsonIOException;
 
 @Component
 public class Service {
-     FieldComparator comparator = new FieldComparator();
+	FieldComparator comparator = new FieldComparator();
 	JsonWriter writerReader = new JsonWriter();
 	ListofPostsAndAuthors listofPosts = new ListofPostsAndAuthors();
 	List<Posts> postData = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Service {
 	List<Authors> authData = new ArrayList<>();
 
 	public void savePost(Posts d) throws Exception {
-		
+
 		listofPosts = writerReader.readFromJson();
 		postData = listofPosts.getPosts();
 		boolean ispost = postData.stream().anyMatch(post -> post.getId().equals(d.getId()));
@@ -39,7 +39,7 @@ public class Service {
 		} else {
 			throw new Exception("same id exsist");
 		}
-		writerReader.writeToJson(postData , authData);
+		writerReader.writeToJson(postData, authData);
 	}
 
 	public void saveAuthor(Authors d) throws Exception {
@@ -55,16 +55,22 @@ public class Service {
 			authData.add(auth);
 		} else
 			throw new Exception("same id exsist");
-		writerReader.writeToJson(postData , authData);
+		writerReader.writeToJson(postData, authData);
 	}
 
-	public List<Posts> getAllPost(String _sort, String _order) throws JsonIOException, IOException {
-		
+	public List<Posts> getAllPostSorted(String _sort, String _order) throws JsonIOException, IOException {
+
 		listofPosts = writerReader.readFromJson();
 		postData = listofPosts.getPosts();
 		comparator.set_sort(_sort, _order);
-		Collections.sort(postData, comparator );
-		return Optional.of(postData).orElse(null);		
+		Collections.sort(postData, comparator);
+		return Optional.of(postData).orElse(null);
+	}
+
+	public List<Posts> getAllPost() throws JsonIOException, IOException {
+
+		listofPosts = writerReader.readFromJson();
+		return Optional.of(listofPosts.getPosts()).orElse(null);
 	}
 
 	public Optional<Posts> getPostById(Optional<Integer> postId) throws JsonIOException, IOException {
@@ -86,7 +92,7 @@ public class Service {
 		postData = listofPosts.getPosts();
 		Optional<Posts> myPost;
 		boolean found = postData.stream().anyMatch(post -> post.getId().equals(postId));
-		if(found) {
+		if (found) {
 			myPost = postData.stream().filter(post -> post.getId().equals(postId)).findFirst().map(obj -> {
 				if (data.getAuthor() != null)
 					obj.setAuthor(data.getAuthor());
@@ -96,12 +102,13 @@ public class Service {
 					obj.setTitle(data.getTitle());
 				if (data.getViews() != null)
 					obj.setViews(data.getViews());
-				
+
 				return obj;
-			});		
-			writerReader.writeToJson(postData , authData);
-		return myPost;
-		}else return null;
+			});
+			writerReader.writeToJson(postData, authData);
+			return myPost;
+		} else
+			return null;
 	}
 
 	public Optional<Authors> updateAuthor(Authors data, int authID) throws Exception {
@@ -118,7 +125,7 @@ public class Service {
 				obj.setPosts(data.getPosts());
 				return obj;
 			});
-			writerReader.writeToJson(postData , authData);
+			writerReader.writeToJson(postData, authData);
 			return myauth;
 		} else
 			return null;
@@ -129,7 +136,7 @@ public class Service {
 		listofPosts = writerReader.readFromJson();
 		postData = listofPosts.getPosts();
 		boolean isremoved = this.postData.removeIf(post -> post.getId().equals(id));
-		writerReader.writeToJson(postData , authData);
+		writerReader.writeToJson(postData, authData);
 		return isremoved;
 
 	}

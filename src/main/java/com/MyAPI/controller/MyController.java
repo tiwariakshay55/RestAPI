@@ -1,6 +1,7 @@
 package com.MyAPI.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +29,13 @@ public class MyController {
 	Service service;
 
 	@GetMapping("/posts")
-	public ResponseEntity<?> getAllPost(@RequestParam(required = false) String  _sort, @RequestParam(required = false) String  _order) throws JsonIOException, IOException {
-		List<Posts> allPost = service.getAllPost(_sort , _order);
+	public ResponseEntity<?> getAllPostSorted(@RequestParam(required = false) String  _sort, @RequestParam(required = false) String  _order) throws JsonIOException, IOException {
+		List<Posts> allPost = new ArrayList<>();
+		if(_sort !=null&&_order!=null) 
+		{
+			 allPost = service.getAllPostSorted(_sort , _order);
+		}
+		else allPost = service.getAllPost();
 		if (allPost != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(allPost);
 		} else {
@@ -37,6 +43,7 @@ public class MyController {
 		}
 
 	}
+	
 
 	@GetMapping("/authors")
 	public ResponseEntity<?> getAllAuthors() throws JsonIOException, IOException {
