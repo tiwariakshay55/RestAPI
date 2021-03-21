@@ -20,7 +20,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.gson.JsonIOException;
 
 public class JsonWriter {
-	Resource resource = new ClassPathResource("/templates/store.json");
+	//Resource resource = new ClassPathResource("/templates/store.json");
 
 	public ListofPostsAndAuthors readFromJson() throws JsonIOException, IOException {
 		ListofPostsAndAuthors posts = new ListofPostsAndAuthors();
@@ -30,7 +30,7 @@ public class JsonWriter {
 			 
 			//String str = resource.getURL().getPath().replace("!", "");
 			
-			InputStream is = TypeReference.class.getResourceAsStream("/json/store.json");
+			InputStream is = TypeReference.class.getResourceAsStream("/store.json");
 			TypeReference<ListofPostsAndAuthors> reference = new TypeReference<ListofPostsAndAuthors>() {
 			};
 			posts = mapper.readValue(is, reference);
@@ -49,7 +49,7 @@ public class JsonWriter {
 		posts.setAuthors(AuthData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
-		String path = TypeReference.class.getResource("/json/store.json").getPath().replace("!", "");
+		String path = TypeReference.class.getResource("/store.json").getPath().replace("!", "");
 		try {
 			    OutputStream os = new FileOutputStream(path);
 				mapper.writeValue(os, posts);
