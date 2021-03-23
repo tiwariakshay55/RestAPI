@@ -1,6 +1,7 @@
 # RestAPI
 
-#URL : https://7d2b0365625f.ngrok.io/posts
+#URL : https://051572a89fad.ngrok.io/posts
+
 
 #Structure
 •	GET    /posts 
